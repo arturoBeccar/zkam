@@ -76,6 +76,7 @@ const CameraCapture: React.FC = () => {
         <video
           ref={videoRef}
           className="absolute inset-0 w-full h-full object-cover"
+          playsInline
         ></video>
       </div>
       <button
