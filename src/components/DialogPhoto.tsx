@@ -21,7 +21,7 @@ function DialogPhoto({
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const { photo, setSign, sign } = useAppState();
+  const { photo, setSign, sign, photoData } = useAppState();
   const { address } = useAccount();
   const { signMessage } = useSignMessage();
   const [isConfirmed, setIsConfirmed] = useState(false);
@@ -50,6 +50,35 @@ function DialogPhoto({
         },
       }
     );
+  };
+
+  const handleDownload = () => {
+    const width = 300;
+    const height = 300;
+
+    // Create canvas
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext("2d");
+
+    // Create new image based on the photodata
+    const imgData = new ImageData(photoData, width, height);
+
+    context.putImageData(imgData, 0, 0);
+
+    // Convert to png
+    const dataUrl = canvas.toDataURL("image/png");
+
+    // Create download link
+    const link = document.createElement("a");
+    link.href = dataUrl;
+    link.download = "imagen.png";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setIsConfirmed(false);
+    setIsOpen(false);
   };
 
   return (
@@ -104,7 +133,9 @@ function DialogPhoto({
           </div>
           <div className="w-full flex flex-row gap-2 justify-between items-center">
             {isConfirmed ? (
-              <Button className="w-full">Download 🎉</Button>
+              <Button className="w-full" onClick={handleDownload}>
+                Download 🎉
+              </Button>
             ) : (
               <>
                 {" "}
