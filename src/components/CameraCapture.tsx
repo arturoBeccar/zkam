@@ -54,6 +54,10 @@ const CameraCapture: React.FC = () => {
         context.drawImage(video, -offsetX, -offsetY, drawWidth, drawHeight);
         const dataUrl = canvas.toDataURL("image/png");
         setPhoto(dataUrl);
+
+        const data = context.getImageData(0, 0, canvas.width, canvas.height);
+        // Array pixels by RGBA
+        console.log("array", data.data);
       }
     }
   };
