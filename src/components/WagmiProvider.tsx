@@ -2,7 +2,7 @@ import { createWeb3Modal } from "@web3modal/wagmi/react";
 import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 
 import { WagmiProvider } from "wagmi";
-import { arbitrum, mainnet } from "wagmi/chains";
+import { arbitrum, mainnet, scroll } from "wagmi/chains";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // 0. Setup queryClient
@@ -19,7 +19,7 @@ const metadata = {
   icons: ["https://avatars.githubusercontent.com/u/37784886"],
 };
 
-const chains = [mainnet, arbitrum] as const;
+const chains = [scroll, mainnet, arbitrum] as const;
 const config = defaultWagmiConfig({
   chains,
   projectId,
@@ -31,7 +31,11 @@ createWeb3Modal({
   metadata,
   wagmiConfig: config,
   projectId,
-  enableAnalytics: true, // Optional - defaults to your Cloud configuration
+  enableAnalytics: true, // Optional - defaults to your Cloud configuration,
+  connectorImages: {
+    coinbaseWallet: "https://images.mydapp.com/coinbase.png",
+    metamask: "https://images.mydapp.com/metamask.png",
+  },
 });
 
 export function Web3ModalProvider({ children }) {
