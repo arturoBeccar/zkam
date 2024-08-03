@@ -1,9 +1,23 @@
-import React, { useRef, useState, useEffect } from "react";
+import { useAppState } from "@/data/storage";
+import React, { useRef, useEffect, useState } from "react";
+import { Button } from "./ui/button";
+import DialogPhoto from "./DialogPhoto";
 
 const CameraCapture: React.FC = () => {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [photo, setPhoto] = useState<string | null>(null);
+  const { setPhoto, setPhotoData } = useAppState();
 
+  // Modal stuff
+  const [isOpen, setIsOpen] = useState(false);
+  const openDialog = () => {
+    setIsOpen(true);
+  };
+
+  //   const closeDialog = () => {
+  //     setIsOpen(false);
+  //   };
+
+  // Video stuff
+  const videoRef = useRef<HTMLVideoElement>(null);
   const getVideo = () => {
     navigator.mediaDevices
       .getUserMedia({ video: true })
@@ -58,20 +72,23 @@ const CameraCapture: React.FC = () => {
         const data = context.getImageData(0, 0, canvas.width, canvas.height);
         // Array pixels by RGBA
         console.log("array", data.data);
+        setPhotoData(data.data);
+        openDialog();
       }
     }
   };
 
-  const closePhoto = () => {
-    setPhoto(null);
-  };
+  //   const closePhoto = () => {
+  //     setPhoto(null);
+  //   };
 
   useEffect(() => {
     getVideo();
   }, [videoRef]);
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col h-full justify-center items-center gap-4">
+      <DialogPhoto setIsOpen={setIsOpen} isOpen={isOpen} />
       <div className="relative w-[300px] h-[300px] overflow-hidden">
         <video
           ref={videoRef}
@@ -79,13 +96,13 @@ const CameraCapture: React.FC = () => {
           playsInline
         ></video>
       </div>
-      <button
+      <Button
+        className="rounded-full h-[80px] w-[80px] p-0 flex justify-center items-center border-4 bg-transparent hover:bg-transparent border-primary group"
         onClick={takePhoto}
-        className="mt-2 px-4 py-2 bg-blue-500 text-white rounded"
       >
-        Take Photo
-      </button>
-      <div
+        <span className="w-[65px] h-[65px] bg-primary opacity-75 rounded-full p-4 group-hover:opacity-100 transition-all"></span>
+      </Button>
+      {/* <div
         className={`flex flex-col items-center mt-4 ${
           photo ? "block" : "hidden"
         }`}
@@ -101,7 +118,7 @@ const CameraCapture: React.FC = () => {
         >
           Close
         </button>
-      </div>
+      </div> */}
     </div>
   );
 };

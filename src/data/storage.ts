@@ -10,4 +10,10 @@ export const useAppState = create<AppState>()((set) => ({
   setName: (name) => {
     set((state) => ({ ...state, name }));
   },
+  setPhoto: (photo) => {
+    set((state) => ({ ...state, photo }));
+  },
+  setPhotoData: (photoData) => {
+    set((state) => ({ ...state, photoData }));
+  },
 }));
