@@ -16,6 +16,9 @@ export const useAppState = create<AppState>()((set) => ({
   setPhotoData: (photoData) => {
     set((state) => ({ ...state, photoData }));
   },
+  setNewPhotoData: (newPhotoData) => {
+    set((state) => ({ ...state, newPhotoData }));
+  },
   setSign: (sign) => {
     set((state) => ({ ...state, sign }));
   },

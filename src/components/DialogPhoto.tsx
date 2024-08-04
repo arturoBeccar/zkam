@@ -13,6 +13,7 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { useAccount, useSignMessage } from "wagmi";
 import { generateRandomNumbers } from "@/helpers/random";
+import { generateHash, processImage } from "@/helpers/generateImage";
 
 function DialogPhoto({
   isOpen,
@@ -21,7 +22,8 @@ function DialogPhoto({
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const { photo, setSign, sign, photoData } = useAppState();
+  const { photo, setSign, sign, photoData, setNewPhotoData, newPhotoData } =
+    useAppState();
   const { address } = useAccount();
   const { signMessage } = useSignMessage();
   const [isConfirmed, setIsConfirmed] = useState(false);
@@ -36,9 +38,13 @@ function DialogPhoto({
         onSuccess(data) {
           setSign(data);
           generateRandomNumbers(sign)
-            .then((data) => {
-              console.log(data);
+            .then((randomNumbers) => {
+              console.log("primera imagen hash: ", generateHash(photoData, []));
+              console.log(randomNumbers);
               // TODO: add algo to change image
+              const newPhoto = processImage(photoData, randomNumbers);
+              console.log("segunda imagen hash: ", generateHash(newPhoto, []));
+              setNewPhotoData(newPhoto);
               setIsLoading(false);
               setIsConfirmed(true);
             })
@@ -63,7 +69,7 @@ function DialogPhoto({
     const context = canvas.getContext("2d");
 
     // Create new image based on the photodata
-    const imgData = new ImageData(photoData, width, height);
+    const imgData = new ImageData(newPhotoData, width, height);
 
     context.putImageData(imgData, 0, 0);
 
