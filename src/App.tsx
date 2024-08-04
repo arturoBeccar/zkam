@@ -1,7 +1,8 @@
 // import { useState } from "react";
 // import { useAppState } from "./data/storage";
 // import { useAccount, useSignMessage } from "wagmi";
-import CameraCapture from "./components/CameraCapture";
+import { Outlet } from "react-router-dom";
+import LowNavBar from "./components/LowNavBar";
 // import { generateRandomNumbers } from "./helpers/random";
 // import { Button } from "./components/ui/button";
 import NavBar from "./components/NavBar";
@@ -44,7 +45,8 @@ function App() {
         >
           Generate random numbers
         </button> */}
-        <CameraCapture />
+        <Outlet />
+        <LowNavBar />
       </div>
     </div>
   );
